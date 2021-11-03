@@ -4,7 +4,7 @@
 
 * untuk file laravel nya terdapat pada branch master
 
-* pada saat put data :
+* pada saat put data, terdapat note pada data collection pajak => id & deleteflag :
 
 {
     "data" : {
