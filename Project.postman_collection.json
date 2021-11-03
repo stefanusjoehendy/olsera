@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "6c9845c5-6c53-4c9a-9e22-06e2823bca3b",
+		"name": "Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Olsera",
+			"item": [
+				{
+					"name": "Insert Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\" : {\r\n        \"id\" : 0,\r\n        \"nama\": \"Baju Tidur\",\r\n        \"pajak\" : [\r\n            {\r\n                \"id\" : 0,\r\n                \"item_id\" : 0,\r\n                \"nama\": \"PPn\",\r\n                \"rate\": 0.1,\r\n                \"deleteflag\" : 0\r\n            },\r\n            {\r\n                \"id\" : 0,\r\n                \"item_id\" : 0,\r\n                \"nama\": \"Pajak Toko\",\r\n                \"rate\": 0.05,\r\n                \"deleteflag\" : 0\r\n            }\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/itemtax",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"itemtax"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Data",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\" : {\r\n        \"id\" : 11,\r\n        \"nama\": \"Baju Anak\"\r\n    },\r\n    \"pajak\" : [\r\n        {\r\n            \"id\": 20, \r\n            \"item_id\": 12,\r\n            \"nama\": \"Pajak\",\r\n            \"rate\": \"0.12\",\r\n            \"deleteflag\" : 0 \r\n        },\r\n        {\r\n            \"id\": 21,\r\n            \"item_id\": 12,\r\n            \"nama\": \"Pajak Online\",\r\n            \"rate\": \"0.10\",\r\n            \"deleteflag\" : 1\r\n        },\r\n        {\r\n            \"id\": 0,\r\n            \"item_id\": 11,\r\n            \"nama\": \"PPh\",\r\n            \"rate\": \"0.03\",\r\n            \"deleteflag\" : 0\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/itemtax/12",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"itemtax",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteData",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/itemtax/9",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"itemtax",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetListData",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/itemtax",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"itemtax"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
