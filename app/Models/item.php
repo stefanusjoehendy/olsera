@@ -23,7 +23,7 @@ class item extends Model
         ->join('pajak', 'item.id', '=', 'pajak.item_id')
         ->groupBy('item.id', 'item.nama')
         ->with(['pajak' => function($q){
-            $q->select('id', 'item_id', 'nama', DB::raw('concat(CAST(rate*100 as DECIMAL(2,0)), "%") as rate'));
+            $q->select('id', 'item_id', 'nama', DB::raw('concat(CAST(rate*100 as DECIMAL(3,0)), "%") as rate'));
         }])
         ->get();
         return $data;
