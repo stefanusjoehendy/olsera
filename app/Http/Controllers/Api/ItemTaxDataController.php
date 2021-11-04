@@ -25,8 +25,9 @@ class ItemTaxDataController extends Controller
      */
     public function index()
     {
-        $itemData = item::with('pajak')->get();
-        return ['data' => $itemData];
+        // $itemData = item::with('pajak')->get();
+        return  ['data' => json_decode($this->item->GetListItemTax())];
+
     }
 
     /**
@@ -53,12 +54,19 @@ class ItemTaxDataController extends Controller
         if ($validPajak->fails()){
             return $validPajak->errors();
         }
-        $itemno = $this->item->CreateItem(collect($request->all()['data']));
         $pajak = collect($request->all()['data']['pajak']);
-        for($i=0;$i<count($pajak);$i++){
-            $this->pajak->CreateTax($itemno,$pajak[$i]);
+        $filterPajak = $pajak->where('deleteflag', 0);
+        
+        if (count($filterPajak) >= 2){
+            $itemno = $this->item->CreateItem(collect($request->all()['data']));
+            for($i=0;$i<count($filterPajak);$i++){
+                $this->pajak->CreateTax($itemno,$filterPajak[$i]);
+            }
+            return $itemno;
         }
-        return $itemno;
+        else{
+            return response()->json(['text' => 'Input pajak minimum 2 data', 'status' => 404 ]);
+        }
     }
 
     /**
@@ -91,41 +99,48 @@ class ItemTaxDataController extends Controller
         if (is_null($data)){
             return response()->json(['text' => 'Data Not Found', 'status' => 404 ]);
         }
-        $this->item->UpdateItem($id, collect($request->all()['data']));
-
+        
         $dataPajak = collect($request->all()['pajak']);
-        for($i=0;$i<count($dataPajak);$i++){
-            $detailPajak = $this->pajak->GetDataPajakByID($dataPajak[$i]['item_id'], $dataPajak[$i]['id']);
-            
-            if($dataPajak[$i]['deleteflag'] == 1){
-                // Hapus Data
+        $filterPajak = $dataPajak->where('deleteflag', 0);
+        if (count($filterPajak) >= 2){
+            $this->item->UpdateItem($id, collect($request->all()['data']));
+            for($i=0;$i<count($dataPajak);$i++){
+                $detailPajak = $this->pajak->GetDataPajakByID($dataPajak[$i]['item_id'], $dataPajak[$i]['id']);
                 
-                if (is_null($detailPajak->get(0))){
-                    return response()->json(['text' => 'Data Not Found1', 'status' => 404 ]);
-                }
-                else {
-                    if (collect($detailPajak->get(0))['item_id'] == $id){
-                        $this->pajak->DeletePajakDetailByDetailNo($dataPajak[$i]['id'], $id);
+                if($dataPajak[$i]['deleteflag'] == 1){
+                    // Hapus Data
+                    
+                    if (is_null($detailPajak->get(0))){
+                        return response()->json(['text' => 'Data Not Found1', 'status' => 404 ]);
+                    }
+                    else {
+                        if (collect($detailPajak->get(0))['item_id'] == $id){
+                            $this->pajak->DeletePajakDetailByDetailNo($dataPajak[$i]['id'], $id);
+                        }
+                    }
+                } 
+                if($dataPajak[$i]['id'] != 0){ 
+                    // Update Data
+                    if (is_null($detailPajak->get(0))){
+                        return response()->json(['text' => 'Data Not Found2', 'status' => 404 ]);
+                    }
+                    else {
+                        if (collect($detailPajak->get(0))['item_id'] == $id){
+                            $this->pajak->UpdatePajakDetail($dataPajak[$i]['id'], $dataPajak[$i]);
+                        }
                     }
                 }
-            } 
-            if($dataPajak[$i]['id'] != 0){ 
-                // Update Data
-                if (is_null($detailPajak->get(0))){
-                    return response()->json(['text' => 'Data Not Found2', 'status' => 404 ]);
+                else{
+                    // Insert Data
+                    $this->pajak->InsertPajakDetail($id, $dataPajak[$i]);
                 }
-                else {
-                    if (collect($detailPajak->get(0))['item_id'] == $id){
-                        $this->pajak->UpdatePajakDetail($dataPajak[$i]['id'], $dataPajak[$i]);
-                    }
-                }
-            }
-            else{
-                // Insert Data
-                $this->pajak->InsertPajakDetail($id, $dataPajak[$i]);
             }
         }
-        return 'success';
+        else{
+            return response()->json(['text' => 'Input pajak minimum 2 data', 'status' => 404 ]);
+        }
+
+        return response()->json(['text' => 'Success', 'status' => 200 ]);;
     }
 
     /**
